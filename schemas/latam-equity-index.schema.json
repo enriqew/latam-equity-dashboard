@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/enriqew/latam-equity-dashboard/schemas/latam-equity-index.schema.json",
+  "title": "LATAM Equity Index",
+  "description": "Schema for artifacts/latam_equity_index.json — one record per LATAM population.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "population_code",
+      "country_iso3",
+      "country_name",
+      "pgx_delta_tacrolimus",
+      "pct_requiring_change",
+      "access_gap",
+      "pgx_gap",
+      "equity_score"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "population_code": {
+        "type": "string",
+        "description": "1000 Genomes superpopulation code",
+        "enum": ["MXL", "PEL", "CLM", "PUR"]
+      },
+      "country_iso3": {
+        "type": "string",
+        "description": "ISO 3166-1 alpha-3 country code",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "country_name": {
+        "type": "string",
+        "description": "Human-readable country name"
+      },
+      "transplants_pmp": {
+        "type": ["number", "null"],
+        "description": "Kidney transplants per million population (most recent year available)"
+      },
+      "total_transplants": {
+        "type": ["integer", "null"],
+        "description": "Absolute transplant count for the reported year"
+      },
+      "data_year": {
+        "type": ["integer", "null"],
+        "description": "Year of the transplant data used",
+        "minimum": 1990,
+        "maximum": 2030
+      },
+      "pgx_delta_tacrolimus": {
+        "type": "number",
+        "description": "delta_vs_baseline (pp) for tacrolimus/CYP3A5 vs CEU. Negative = fewer patients requiring change vs European baseline."
+      },
+      "pct_requiring_change": {
+        "type": "number",
+        "description": "Percentage of individuals in this population requiring dose/therapy change per CPIC guidelines",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "access_gap": {
+        "type": "number",
+        "description": "Global median pmp minus this country's pmp. Positive = below median (worse access)."
+      },
+      "pgx_gap": {
+        "type": "number",
+        "description": "|delta_vs_baseline| — absolute pharmacogenomic divergence from European dosing baseline",
+        "minimum": 0
+      },
+      "equity_score": {
+        "type": "number",
+        "description": "access_gap + pgx_gap. Higher = worse compounded inequity."
+      }
+    }
+  }
+}

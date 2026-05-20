@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Data — raw downloads (never commit raw source data; keep directory)
+data/raw/*
+!data/raw/.gitkeep
+
+# Data — exports (populated at runtime; only committed intentionally)
+data/exports/*
+!data/exports/.gitkeep
+
+# Artifacts (populated at runtime; keep directory)
+artifacts/*
+!artifacts/.gitkeep
+
+# dbt
+dbt_project/target/
+dbt_project/logs/
+dbt_project/.user.yml
+dbt_project/dbt_packages/
+
+# DuckDB databases
+*.duckdb
+*.db
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log

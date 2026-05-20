@@ -1,0 +1,16 @@
+# dbt connection profiles for latam-equity-dashboard.
+# Uses dbt-duckdb for local development — no credentials required.
+# Override target in CI by setting DBT_TARGET env var.
+
+latam_equity_local:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../data/equity.duckdb') }}"
+      threads: 4
+
+    prod:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../data/equity_prod.duckdb') }}"
+      threads: 4
