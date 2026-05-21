@@ -29,7 +29,7 @@ ARTIFACTS_DIR = REPO_ROOT / "artifacts"
 
 TRANSPLANTS_PATH = DATA_DIR / "raw" / "world-transplants.json"
 PGX_PATH = DATA_DIR / "raw" / "drug_impact_summary.json"
-GNOMAD_PGX_PATH = DATA_DIR / "raw" / "gnomad_cyp3a5.json"
+GNOMAD_PGX_PATH = DATA_DIR / "raw" / "gnomad_pgx_multi.json"
 
 OUTPUT_EQUITY = ARTIFACTS_DIR / "latam_equity_index.json"
 OUTPUT_EQUITY_EXTENDED = ARTIFACTS_DIR / "latam_equity_index_extended.json"
@@ -63,7 +63,7 @@ def run() -> None:
     gnomad_pgx = _load_json(GNOMAD_PGX_PATH)
     log.info("  transplants: %d rows", len(transplants))
     log.info("  drug_impact: %d rows", len(drug_impact))
-    log.info("  gnomad_pgx: %d populations", len(gnomad_pgx.get("populations", [])) if isinstance(gnomad_pgx, dict) else 0)
+    log.info("  gnomad_pgx: %d genes", len(gnomad_pgx.get("genes", {})) if isinstance(gnomad_pgx, dict) else 0)
 
     log.info("Computing equity index (4 countries, 1000G PGx) …")
     points = build_equity_points(transplants, drug_impact)
