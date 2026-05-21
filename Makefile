@@ -21,7 +21,10 @@ ingest-transplants:
 ingest-pgx:
 	python -m ingest.pgx_artifacts
 
-ingest: ingest-transplants ingest-pgx
+ingest-gnomad:
+	python -m ingest.gnomad_pgx
+
+ingest: ingest-transplants ingest-pgx ingest-gnomad
 
 # ── dbt ───────────────────────────────────────────────────────────────────────
 dbt-run:
