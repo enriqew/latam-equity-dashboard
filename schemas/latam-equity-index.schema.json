@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/enriqew/latam-equity-dashboard/schemas/latam-equity-index.schema.json",
   "title": "LATAM Equity Index",
-  "description": "Schema for artifacts/latam_equity_index.json — one record per LATAM population.",
+  "description": "Schema for artifacts/latam_equity_index.json — one record per LATAM population, sorted descending by equity_score.",
   "type": "array",
   "items": {
     "type": "object",
@@ -12,6 +12,9 @@
       "country_name",
       "pgx_delta_tacrolimus",
       "pct_requiring_change",
+      "pgx_composite_gap",
+      "pgx_per_gene",
+      "transplants_pmp_is_estimate",
       "access_gap",
       "pgx_gap",
       "equity_score"
@@ -20,7 +23,7 @@
     "properties": {
       "population_code": {
         "type": "string",
-        "description": "1000 Genomes superpopulation code",
+        "description": "1000 Genomes population code",
         "enum": ["MXL", "PEL", "CLM", "PUR"]
       },
       "country_iso3": {
@@ -46,15 +49,35 @@
         "minimum": 1990,
         "maximum": 2030
       },
+      "transplants_pmp_is_estimate": {
+        "type": "boolean",
+        "description": "True only for PRI, which lacks IRODaT data; value is derived from US territory figures"
+      },
       "pgx_delta_tacrolimus": {
         "type": "number",
-        "description": "delta_vs_baseline (pp) for tacrolimus/CYP3A5 vs CEU. Negative = fewer patients requiring change vs European baseline."
+        "description": "delta_vs_baseline (pp) for tacrolimus/CYP3A5 vs CEU. Retained for backward compatibility; use pgx_per_gene.CYP3A5 for the composite."
       },
       "pct_requiring_change": {
         "type": "number",
-        "description": "Percentage of individuals in this population requiring dose/therapy change per CPIC guidelines",
+        "description": "Percentage of individuals requiring dose/therapy change for tacrolimus/CYP3A5 per CPIC guidelines",
         "minimum": 0,
         "maximum": 100
+      },
+      "pgx_composite_gap": {
+        "type": "number",
+        "description": "Mean |delta_vs_baseline| across all 5 focal CPIC Level A gene-drug pairs. Equal to pgx_gap.",
+        "minimum": 0
+      },
+      "pgx_per_gene": {
+        "type": "object",
+        "description": "Per-gene absolute delta breakdown: {gene_symbol: abs_delta_pp}. Keys are CYP3A5, CYP2C19, VKORC1, DPYD, CYP2C9.",
+        "propertyNames": {
+          "enum": ["CYP3A5", "CYP2C19", "VKORC1", "DPYD", "CYP2C9"]
+        },
+        "additionalProperties": {
+          "type": "number",
+          "minimum": 0
+        }
       },
       "access_gap": {
         "type": "number",
@@ -62,12 +85,12 @@
       },
       "pgx_gap": {
         "type": "number",
-        "description": "|delta_vs_baseline| — absolute pharmacogenomic divergence from European dosing baseline",
+        "description": "Equal to pgx_composite_gap. Named for formula symmetry: equity_score = access_gap + pgx_gap.",
         "minimum": 0
       },
       "equity_score": {
         "type": "number",
-        "description": "access_gap + pgx_gap. Higher = worse compounded inequity."
+        "description": "access_gap + pgx_gap. Higher = worse compounded inequity on both dimensions simultaneously."
       }
     }
   }
