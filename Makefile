@@ -23,6 +23,7 @@ ingest-pgx:
 
 ingest-gnomad:
 	python -m ingest.gnomad_pgx
+	python -m ingest.gnomad_pgx --multi
 
 ingest: ingest-transplants ingest-pgx ingest-gnomad
 
