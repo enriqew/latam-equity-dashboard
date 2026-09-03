@@ -69,3 +69,8 @@ desktop.ini
 
 # Logs
 *.log
+
+# ── Agent/IDE session data ───────────────────────────────────────────────────
+.claude/
+.cursor/
+.aider*
