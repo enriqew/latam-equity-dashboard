@@ -12,8 +12,8 @@ The output is a set of JSON artifacts ready for visualization or downstream anal
 
 1. [Background and Motivation](#background-and-motivation)
 2. [Index Methodology](#index-methodology)
-   - [Original Index — 4 Countries](#original-index--4-countries)
-   - [Extended Index — 18 Countries](#extended-index--18-countries)
+   - [Original Index, 4 Countries](#original-index-4-countries)
+   - [Extended Index, 18 Countries](#extended-index-18-countries)
    - [Score Formula](#score-formula)
 3. [CPIC Gene-Drug Pairs](#cpic-gene-drug-pairs)
 4. [Exclusions and Rationale](#exclusions-and-rationale)
@@ -31,7 +31,7 @@ The output is a set of JSON artifacts ready for visualization or downstream anal
 
 ## Background and Motivation
 
-Kidney transplantation is the most effective treatment for end-stage renal disease, yet access rates across Latin America vary by more than an order of magnitude relative to high-income countries. At the same time, most pharmacogenomic dosing guidelines — including those published by the Clinical Pharmacogenomics Implementation Consortium (CPIC) — were calibrated on European-ancestry cohorts. Patients from admixed Latin American populations carry different allele frequencies for key drug-metabolizing genes, meaning standard dosing protocols may be systematically miscalibrated for them.
+Kidney transplantation is the most effective treatment for end-stage renal disease, yet access rates across Latin America vary by more than an order of magnitude relative to high-income countries. At the same time, most pharmacogenomic dosing guidelines (including those published by the Clinical Pharmacogenomics Implementation Consortium (CPIC)) were calibrated on European-ancestry cohorts. Patients from admixed Latin American populations carry different allele frequencies for key drug-metabolizing genes, meaning standard dosing protocols may be systematically miscalibrated for them.
 
 This pipeline makes both gaps quantitative and comparable on a single numeric scale, allowing policy-level comparison across countries and over time.
 
@@ -39,7 +39,7 @@ This pipeline makes both gaps quantitative and comparable on a single numeric sc
 
 ## Index Methodology
 
-### Original Index — 4 Countries
+### Original Index: 4 Countries
 
 Covers Mexico, Peru, Colombia, and Puerto Rico. Pharmacogenomic data come from the 1000 Genomes Project phase 3 populations with a direct geographic mapping:
 
@@ -58,13 +58,13 @@ pgx_gap = mean( |delta_vs_baseline| for each of the 5 focal pairs )
 
 where `delta_vs_baseline` is the difference in the percentage of patients requiring a dose or therapy change between the LATAM population and the European CEU baseline.
 
-### Extended Index — 18 Countries
+### Extended Index: 18 Countries
 
 Expands coverage to 18 countries by adding 14 additional countries that lack a direct 1000 Genomes population match. These countries use the gnomAD v3 AMR (admixed American) aggregate as a pharmacogenomic proxy.
 
 The extended index uses a single, methodologically consistent metric for all 18 countries: CYP3A5\*3 expressor probability derived from allele frequencies via Hardy-Weinberg equilibrium.
 
-**1000G-mapped countries (4):** MEX, PER, COL, PRI — same geographic mapping as the original index, re-computed under HWE.
+**1000G-mapped countries (4):** MEX, PER, COL, PRI, same geographic mapping as the original index, re-computed under HWE.
 
 **gnomAD AMR-proxy countries (14):**
 
@@ -112,9 +112,9 @@ Each pair contributes one `|delta_vs_baseline|` value to the composite. The comp
 
 Two genes were evaluated and explicitly excluded from the composite:
 
-**TPMT** — `delta_vs_baseline = 0` for all four LATAM populations. TPMT allele frequencies in MXL, PEL, CLM, and PUR are indistinguishable from the CEU baseline within the 1000 Genomes dataset. Including it would add noise without informative signal and would artificially dilute the composite mean.
+**TPMT**: `delta_vs_baseline = 0` for all four LATAM populations. TPMT allele frequencies in MXL, PEL, CLM, and PUR are indistinguishable from the CEU baseline within the 1000 Genomes dataset. Including it would add noise without informative signal and would artificially dilute the composite mean.
 
-**G6PD** — The CEU baseline in the source CPIC drug impact data appears as approximately 100% actionable, while LATAM populations show 1–8%. This near-zero CEU reference value is inconsistent with the known epidemiology of G6PD deficiency (which is rare in European populations) and indicates a pipeline artifact in the upstream data source. Including G6PD would cause it to dominate the composite and distort the index in a way that does not reflect real population pharmacogenomics.
+**G6PD**: The CEU baseline in the source CPIC drug impact data appears as approximately 100% actionable, while LATAM populations show 1–8%. This near-zero CEU reference value is inconsistent with the known epidemiology of G6PD deficiency (which is rare in European populations) and indicates a pipeline artifact in the upstream data source. Including G6PD would cause it to dominate the composite and distort the index in a way that does not reflect real population pharmacogenomics.
 
 Both exclusions are documented in `src/latam_equity/pgx_composite.py`.
 
@@ -124,9 +124,9 @@ Both exclusions are documented in `src/latam_equity/pgx_composite.py`.
 
 | Source | What it provides | How it is ingested |
 |--------|-----------------|-------------------|
-| **IRODaT / GODT** (Global Observatory on Donation and Transplantation) | Transplants per million population by country and year | `ingest/transplant_artifacts.py` — copies from a local sibling repo or fetches from a GitHub release of `enriqew/transplant-atlas` |
-| **CPIC drug impact summary** | Per-population percentages requiring dose/therapy change, `delta_vs_baseline` for each gene-drug pair | `ingest/pgx_artifacts.py` — copies from a local sibling repo or fetches from a GitHub release of `enriqew/pgx-latam-atlas` |
-| **gnomAD v3** (Broad Institute) | CYP3A5\*3 allele counts and allele numbers for 1000G sub-populations and the AMR aggregate | `ingest/gnomad_pgx.py` — live GraphQL query to the gnomAD API at `https://gnomad.broadinstitute.org/api` |
+| **IRODaT / GODT** (Global Observatory on Donation and Transplantation) | Transplants per million population by country and year | `ingest/transplant_artifacts.py`: copies from a local sibling repo or fetches from a GitHub release of `enriqew/transplant-atlas` |
+| **CPIC drug impact summary** | Per-population percentages requiring dose/therapy change, `delta_vs_baseline` for each gene-drug pair | `ingest/pgx_artifacts.py`: copies from a local sibling repo or fetches from a GitHub release of `enriqew/pgx-latam-atlas` |
+| **gnomAD v3** (Broad Institute) | CYP3A5\*3 allele counts and allele numbers for 1000G sub-populations and the AMR aggregate | `ingest/gnomad_pgx.py`: live GraphQL query to the gnomAD API at `https://gnomad.broadinstitute.org/api` |
 
 ### Ingest source options
 
@@ -235,7 +235,7 @@ pip install -e ".[dev]"
 
 The full pipeline runs in three sequential steps, each wrapped by a Makefile target.
 
-### Step 1 — Ingest raw data
+### Step 1: Ingest raw data
 
 Downloads or copies source files into `data/raw/`.
 
@@ -259,7 +259,7 @@ python -m ingest.transplant_artifacts --source github
 python -m ingest.pgx_artifacts --source github
 ```
 
-### Step 2 — Export artifacts
+### Step 2: Export artifacts
 
 Reads from `data/raw/`, computes both indexes and the time series, and writes JSON to `artifacts/`.
 
@@ -267,13 +267,13 @@ Reads from `data/raw/`, computes both indexes and the time series, and writes JS
 make export
 ```
 
-### Step 3 — Run tests
+### Step 3: Run tests
 
 ```bash
 make test
 ```
 
-### Optional — dbt transformation layer
+### Optional: dbt transformation layer
 
 A dbt project is included for users who want to run the index computation inside DuckDB rather than in Python. It is not required to produce the JSON artifacts.
 
@@ -400,10 +400,10 @@ This project is not affiliated with IRODaT, the Global Observatory on Donation a
 
 ## References
 
-- IRODaT / GODT: Global Observatory on Donation and Transplantation — https://www.irodat.org
-- CPIC: Clinical Pharmacogenomics Implementation Consortium — https://cpicpgx.org
-- 1000 Genomes Project Phase 3 — https://www.internationalgenome.org
-- gnomAD v3: Genome Aggregation Database — https://gnomad.broadinstitute.org
+- IRODaT / GODT: Global Observatory on Donation and Transplantation, https://www.irodat.org
+- CPIC: Clinical Pharmacogenomics Implementation Consortium, https://cpicpgx.org
+- 1000 Genomes Project Phase 3, https://www.internationalgenome.org
+- gnomAD v3: Genome Aggregation Database, https://gnomad.broadinstitute.org
 
 ## Data & licenses
 
