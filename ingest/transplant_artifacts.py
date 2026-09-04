@@ -13,19 +13,20 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import shutil
 from pathlib import Path
 
-from ingest._common import RAW_DIR, ensure_dirs, fetch_json, log, save_raw
+from ingest._common import REPO_ROOT, RAW_DIR, ensure_dirs, fetch_json, log, save_raw
 
-# Local portfolio path
-PORTFOLIO_TRANSPLANT_DIR = Path(
-    r"C:\Users\ciker\PycharmProjects\data-dive-design-hub\src\data\transplant-atlas"
-)
+# Local portfolio path. Defaults to a sibling checkout of the portfolio repo;
+# override with PORTFOLIO_DIR when it lives somewhere else.
+PORTFOLIO_DIR = Path(os.environ.get("PORTFOLIO_DIR", REPO_ROOT.parent / "data-dive-design-hub"))
+PORTFOLIO_TRANSPLANT_DIR = PORTFOLIO_DIR / "src" / "data" / "transplant-atlas"
 
 # GitHub raw artefact base URL
 GITHUB_RAW_BASE = (
-    "https://raw.githubusercontent.com/enriqew/transplant-atlas/main/artifacts"
+    "https://raw.githubusercontent.com/enriqew/transplant-atlas/main/data/exports"
 )
 
 TRANSPLANT_FILES = [

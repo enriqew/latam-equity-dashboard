@@ -15,13 +15,16 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import shutil
 from pathlib import Path
 
 from ingest._common import REPO_ROOT, RAW_DIR, ensure_dirs, fetch_json, log, save_raw
 
-# Local portfolio path (sibling repo or configured path)
-PORTFOLIO_PGX_DIR = Path(r"C:\Users\ciker\PycharmProjects\data-dive-design-hub\src\data\pgx")
+# Local portfolio path. Defaults to a sibling checkout of the portfolio repo;
+# override with PORTFOLIO_DIR when it lives somewhere else.
+PORTFOLIO_DIR = Path(os.environ.get("PORTFOLIO_DIR", REPO_ROOT.parent / "data-dive-design-hub"))
+PORTFOLIO_PGX_DIR = PORTFOLIO_DIR / "src" / "data" / "pgx"
 
 # GitHub raw artefact base URL (update tag as pipeline releases)
 GITHUB_RAW_BASE = (
