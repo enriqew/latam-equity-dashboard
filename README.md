@@ -1,5 +1,7 @@
 # latam-equity-dashboard
 
+**Live demo:** [eredonda.com/projects/latam-equity-dashboard](https://eredonda.com/projects/latam-equity-dashboard?utm_source=github&utm_medium=referral)
+
 A Python data pipeline that computes a **dual-inequity index** for kidney transplant patients in Latin America. The index combines two independent dimensions of disadvantage: access to transplantation (how many transplants happen relative to population size) and pharmacogenomic divergence (how much LATAM populations differ from the European baseline that drives most clinical dosing guidelines).
 
 The output is a set of JSON artifacts ready for visualization or downstream analysis. There is no machine learning and no database; the pipeline is a functional composition of ingest, transform, and export steps.
@@ -370,7 +372,7 @@ Run metadata: generation timestamp (UTC ISO 8601), source file paths relative to
 
 ## Running Tests
 
-The test suite uses pytest and covers 27 test cases across three modules. Tests are self-contained with synthetic fixture data and do not require network access or pre-ingested files.
+The test suite uses pytest and covers 30 test cases across three modules. Tests are self-contained with synthetic fixture data and do not require network access or pre-ingested files.
 
 ```bash
 make test
@@ -402,3 +404,25 @@ This project is not affiliated with IRODaT, the Global Observatory on Donation a
 - CPIC: Clinical Pharmacogenomics Implementation Consortium — https://cpicpgx.org
 - 1000 Genomes Project Phase 3 — https://www.internationalgenome.org
 - gnomAD v3: Genome Aggregation Database — https://gnomad.broadinstitute.org
+
+## Data & licenses
+
+- **IRODaT** and **GODT**: used with attribution, aggregated rows only.
+- **1000 Genomes Project** Phase 3: open access. **PharmGKB**: CC BY-SA 4.0.
+  **CPIC**: open-access guidelines. **gnomAD** v3: open access.
+- Code: MIT, see [LICENSE](LICENSE).
+
+## A note on the two indices
+
+`latam_equity_index.json` covers four countries and derives CYP3A5 divergence
+from 1000 Genomes genotype counts. `latam_equity_index_extended.json` covers
+eighteen and derives it from gnomAD allele frequencies under Hardy-Weinberg,
+using an AMR proxy where no country-specific cohort exists (flagged per row as
+`pgx_is_proxy`).
+
+The two disagree on the direction of the CYP3A5 signal: the 1000 Genomes path
+puts Peru below the European baseline, the gnomAD path well above it. That is
+unresolved, and it is the reason both files ship rather than one. The dbt model
+under `dbt_project/` implements the four-country version only, so it is not
+equivalent to the Python pipeline and should not be read as a drop-in
+replacement for it.

@@ -25,7 +25,7 @@ from __future__ import annotations
 import statistics
 from dataclasses import dataclass, field
 
-from src.latam_equity.equity_index import PRI_TRANSPLANTS_PMP_ESTIMATE
+from src.latam_equity.equity_index import ISO3_TO_COUNTRY_NAME, PRI_TRANSPLANTS_PMP_ESTIMATE
 
 # 1000G populations with direct country mapping
 LATAM_1KG: dict[str, str] = {
@@ -186,7 +186,7 @@ def build_equity_points_extended(
         pt = EquityPointExtended(
             population_code=gnomad_pop_id.replace("1kg:", "").upper(),
             country_iso3=iso3,
-            country_name=transplant_row.get("country_name", iso3) if transplant_row else iso3,
+            country_name=transplant_row.get("country_name", iso3) if transplant_row else ISO3_TO_COUNTRY_NAME.get(iso3, iso3),
             transplants_pmp=(
                 PRI_TRANSPLANTS_PMP_ESTIMATE if use_pri_estimate
                 else float(transplant_row["transplants_pmp"]) if transplant_row else None
@@ -211,7 +211,7 @@ def build_equity_points_extended(
         pt = EquityPointExtended(
             population_code=AMR_PROXY_POP_CODE,
             country_iso3=iso3,
-            country_name=transplant_row.get("country_name", iso3) if transplant_row else iso3,
+            country_name=transplant_row.get("country_name", iso3) if transplant_row else ISO3_TO_COUNTRY_NAME.get(iso3, iso3),
             transplants_pmp=float(transplant_row["transplants_pmp"]) if transplant_row else None,
             total_transplants=int(transplant_row.get("total_transplants") or 0) if transplant_row else None,
             data_year=int(transplant_row.get("year") or 0) if transplant_row else None,
